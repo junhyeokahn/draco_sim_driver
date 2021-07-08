@@ -8,6 +8,7 @@
 
 namespace aptk {
 namespace ctrl {
+
 class DracoSimDriver : public ctrl::ControllerBase {
 public:
   DracoSimDriver() {
@@ -15,6 +16,32 @@ public:
     draco_interface_ = new DracoInterface(true);
     draco_sensor_data_ = new DracoSensorData();
     draco_command_ = new DracoCommand();
+
+    actuator_map_["neck_pitch"] = 0;
+    actuator_map_["l_shoulder_fe"] = 1;
+    actuator_map_["l_shoulder_aa"] = 2;
+    actuator_map_["l_shoulder_ie"] = 3;
+    actuator_map_["l_elbow_fe"] = 4;
+    actuator_map_["l_wrist_ps"] = 5;
+    actuator_map_["l_wrist_pitch"] = 6;
+    actuator_map_["r_shoulder_fe"] = 7;
+    actuator_map_["r_shoulder_aa"] = 8;
+    actuator_map_["r_shoulder_ie"] = 9;
+    actuator_map_["r_elbow_fe"] = 10;
+    actuator_map_["r_wrist_ps"] = 11;
+    actuator_map_["r_wrist_pitch"] = 12;
+    actuator_map_["l_hip_ie"] = 13;
+    actuator_map_["l_hip_aa"] = 14;
+    actuator_map_["l_hip_fe"] = 15;
+    actuator_map_["l_knee_fe"] = 16;
+    actuator_map_["l_ankle_fe"] = 17;
+    actuator_map_["l_ankle_ie"] = 18;
+    actuator_map_["r_hip_ie"] = 19;
+    actuator_map_["r_hip_aa"] = 20;
+    actuator_map_["r_hip_fe"] = 21;
+    actuator_map_["r_knee_fe"] = 22;
+    actuator_map_["r_ankle_fe"] = 23;
+    actuator_map_["r_ankle_ie"] = 24;
   };
   ~DracoSimDriver() {
     delete draco_interface_;
@@ -56,6 +83,9 @@ public:
   void CopyData();
   void CopyCommand();
 
+  // for debugging purpose
+  void CopyBase();
+
 private:
   boost::shared_ptr<ctrl::DriverBase> driver_;
 
@@ -71,6 +101,7 @@ private:
 
   std::map<std::string, dart::dynamics::JointPtr> joint_id_;
   std::map<std::string, dart::dynamics::BodyNodePtr> link_id_;
+  std::map<std::string, int> actuator_map_;
 };
 } // namespace ctrl
 } // namespace aptk
