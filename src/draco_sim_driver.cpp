@@ -10,6 +10,12 @@ void DracoSimDriver::updateCommandData() {
   draco_interface_->getCommand(draco_sensor_data_, draco_command_);
   // coppy command
   CopyCommand();
+
+  // std::cout << "-------------------" << std::endl;
+  // std::cout << "giving" << std::endl;
+  // std::cout << draco_command_->joint_torques["neck_pitch"] << std::endl;
+  // std::cout << "measuring" << std::endl;
+  // std::cout << data_->eff_dof[dof_map_["neck_pitch"]] << std::endl;
 }
 
 void DracoSimDriver::CopyData() {
@@ -36,9 +42,9 @@ void DracoSimDriver::CopyData() {
           joint_id_["l_knee_fe"]->getVelocity(0) / 2.;
     } else if (it->first == "r_knee_fe" or it->first == "r_knee_fe_jp") {
       draco_sensor_data_->joint_positions["r_knee_fe_jd"] =
-          joint_id_["l_knee_fe"]->getPosition(0) / 2.;
+          joint_id_["r_knee_fe"]->getPosition(0) / 2.;
       draco_sensor_data_->joint_positions["r_knee_fe_jp"] =
-          joint_id_["l_knee_fe"]->getPosition(0) / 2.;
+          joint_id_["r_knee_fe"]->getPosition(0) / 2.;
       draco_sensor_data_->joint_velocities["r_knee_fe_jd"] =
           joint_id_["r_knee_fe"]->getVelocity(0) / 2.;
       draco_sensor_data_->joint_velocities["r_knee_fe_jp"] =
@@ -50,22 +56,22 @@ void DracoSimDriver::CopyData() {
           it->second->getVelocity(0);
     }
   }
-
-} // namespace ctrl
+}
 
 void DracoSimDriver::CopyCommand() {
   // copy torques
+  double scale(1.);
   for (std::map<std::string, dart::dynamics::JointPtr>::iterator it =
            joint_id_.begin();
        it != joint_id_.end(); it++) {
     if (it->first == "l_knee_fe") {
       command_->eff_atv[actuator_map_[it->first]] =
-          draco_command_->joint_torques["l_knee_fe_jd"];
+          scale * draco_command_->joint_torques["l_knee_fe_jd"];
     } else if (it->first == "l_knee_fe_jp") {
       // do nothing
     } else if (it->first == "r_knee_fe") {
       command_->eff_atv[actuator_map_[it->first]] =
-          draco_command_->joint_torques["r_knee_fe_jd"];
+          scale * draco_command_->joint_torques["r_knee_fe_jd"];
     } else if (it->first == "r_knee_fe_jp") {
       // do nothing
     } else {
@@ -98,6 +104,32 @@ void DracoSimDriver::CopyBase() {
   draco_sensor_data_->base_joint_lin_vel =
       root_bn->getSpatialVelocity().tail(3);
 }
+
+bool DracoSimDriver::InterruptHandler(apptronik_srvs::Float32::Request &req,
+                                      apptronik_srvs::Float32::Response &res) {
+  double data = static_cast<double>(req.set_data);
+
+  if (data == 5) {
+    draco_interface_->interrupt->b_interrupt_button_x = true;
+  } else if (data == 8) {
+    draco_interface_->interrupt->b_interrupt_button_w = true;
+  } else if (data == 4) {
+    draco_interface_->interrupt->b_interrupt_button_a = true;
+  } else if (data == 6) {
+    draco_interface_->interrupt->b_interrupt_button_d = true;
+  } else if (data == 2) {
+    draco_interface_->interrupt->b_interrupt_button_s = true;
+  } else if (data == 7) {
+    draco_interface_->interrupt->b_interrupt_button_q = true;
+  } else if (data == 9) {
+    draco_interface_->interrupt->b_interrupt_button_e = true;
+  } else if (data == 0) {
+    draco_interface_->interrupt->b_interrupt_button_r = true;
+  } else {
+    std::cout << "Wrong input for interrupt handler" << std::endl;
+  }
+}
+
 } // namespace ctrl
 } // namespace aptk
 

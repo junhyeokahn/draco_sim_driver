@@ -1,5 +1,6 @@
 #pragma once
 
+#include <apptronik_srvs/Float32.h>
 #include <cortex_data_plugins/generic_command_data.hpp>
 #include <cortex_data_plugins/generic_state_data.hpp>
 #include <cortex_framework/plugin_base/controller_base.hpp>
@@ -42,6 +43,40 @@ public:
     actuator_map_["r_knee_fe"] = 22;
     actuator_map_["r_ankle_fe"] = 23;
     actuator_map_["r_ankle_ie"] = 24;
+
+    dof_map_["rootJoint_rot_x"] = 0;
+    dof_map_["rootJoint_rot_y"] = 1;
+    dof_map_["rootJoint_rot_z"] = 2;
+    dof_map_["rootJoint_pos_x"] = 3;
+    dof_map_["rootJoint_pos_y"] = 4;
+    dof_map_["rootJoint_pos_z"] = 5;
+    dof_map_["neck_pitch"] = 6;
+    dof_map_["l_shoulder_fe"] = 7;
+    dof_map_["l_shoulder_aa"] = 8;
+    dof_map_["l_shoulder_ie"] = 9;
+    dof_map_["l_elbow_fe"] = 10;
+    dof_map_["l_wrist_ps"] = 11;
+    dof_map_["l_wrist_pitch"] = 12;
+    dof_map_["r_shoulder_fe"] = 13;
+    dof_map_["r_shoulder_aa"] = 14;
+    dof_map_["r_shoulder_ie"] = 15;
+    dof_map_["r_elbow_fe"] = 16;
+    dof_map_["r_wrist_ps"] = 17;
+    dof_map_["r_wrist_pitch"] = 18;
+    dof_map_["l_hip_ie"] = 19;
+    dof_map_["l_hip_aa"] = 20;
+    dof_map_["l_hip_fe"] = 21;
+    dof_map_["l_knee_fe_jp"] = 22;
+    dof_map_["l_knee_fe"] = 23;
+    dof_map_["l_ankle_fe"] = 24;
+    dof_map_["l_ankle_ie"] = 25;
+    dof_map_["r_hip_ie"] = 26;
+    dof_map_["r_hip_aa"] = 27;
+    dof_map_["r_hip_fe"] = 28;
+    dof_map_["r_knee_fe_jp"] = 29;
+    dof_map_["r_knee_fe"] = 30;
+    dof_map_["r_ankle_fe"] = 31;
+    dof_map_["r_ankle_ie"] = 32;
   };
   ~DracoSimDriver() {
     delete draco_interface_;
@@ -62,6 +97,9 @@ public:
 
     command_data_base->initialize(driver_->rtNodeHandle(), driver_->logger());
     command_data_base->addDebugInterfaces();
+
+    interrupt_handler_ = driver_->nodeHandle().advertiseService(
+        "interrupt_handler", &DracoSimDriver::InterruptHandler, this);
 
     for (int i = 0; i < skel_->getNumJoints(); ++i) {
       dart::dynamics::JointPtr joint = skel_->getJoint(i);
@@ -102,6 +140,12 @@ private:
   std::map<std::string, dart::dynamics::JointPtr> joint_id_;
   std::map<std::string, dart::dynamics::BodyNodePtr> link_id_;
   std::map<std::string, int> actuator_map_;
+  std::map<std::string, int> dof_map_;
+
+  ros::ServiceServer interrupt_handler_;
+
+  bool InterruptHandler(apptronik_srvs::Float32::Request &req,
+                        apptronik_srvs::Float32::Response &res);
 };
 } // namespace ctrl
 } // namespace aptk
