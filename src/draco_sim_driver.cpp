@@ -11,11 +11,11 @@ void DracoSimDriver::updateCommandData() {
   // coppy command
   CopyCommand();
 
-  // std::cout << "-------------------" << std::endl;
-  // std::cout << "giving" << std::endl;
-  // std::cout << draco_command_->joint_torques["neck_pitch"] << std::endl;
-  // std::cout << "measuring" << std::endl;
-  // std::cout << data_->eff_dof[dof_map_["neck_pitch"]] << std::endl;
+  std::cout << "-------------------" << std::endl;
+  std::cout << "giving" << std::endl;
+  std::cout << draco_command_->joint_torques["neck_pitch"] << std::endl;
+  std::cout << "measuring" << std::endl;
+  std::cout << data_->eff_dof[dof_map_["neck_pitch"]] << std::endl;
 }
 
 void DracoSimDriver::CopyData() {
