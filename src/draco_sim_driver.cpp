@@ -11,11 +11,7 @@ void DracoSimDriver::updateCommandData() {
   // coppy command
   CopyCommand();
 
-  std::cout << "-------------------" << std::endl;
-  std::cout << "giving" << std::endl;
-  std::cout << draco_command_->joint_torques["neck_pitch"] << std::endl;
-  std::cout << "measuring" << std::endl;
-  std::cout << data_->eff_dof[dof_map_["neck_pitch"]] << std::endl;
+  count_ += 1;
 }
 
 void DracoSimDriver::CopyData() {
@@ -59,8 +55,9 @@ void DracoSimDriver::CopyData() {
 }
 
 void DracoSimDriver::CopyCommand() {
+
   // copy torques
-  double scale(1.);
+  double scale(0.5);
   for (std::map<std::string, dart::dynamics::JointPtr>::iterator it =
            joint_id_.begin();
        it != joint_id_.end(); it++) {

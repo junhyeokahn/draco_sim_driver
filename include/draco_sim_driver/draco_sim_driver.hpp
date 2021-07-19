@@ -146,6 +146,8 @@ private:
 
   bool InterruptHandler(apptronik_srvs::Float32::Request &req,
                         apptronik_srvs::Float32::Response &res);
+
+  int count_ = 0;
 };
 } // namespace ctrl
 } // namespace aptk
