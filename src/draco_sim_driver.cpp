@@ -5,7 +5,7 @@ namespace ctrl {
 void DracoSimDriver::updateCommandData() {
   // copy data
   CopyData();
-  CopyBase();
+  // CopyBase();
   // compute command
   draco_interface_->getCommand(draco_sensor_data_, draco_command_);
   // coppy command
