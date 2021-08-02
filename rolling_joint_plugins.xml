@@ -1,0 +1,7 @@
+<library path="lib/librolling_joint">
+  <class name="aptk::ctrl::MyRollingJoint" type="aptk::ctrl::MyRollingJoint" base_class_type="aptk::ctrl::ControllerBase">
+  <description>
+    rolling_joint
+  </description>
+  </class>
+</library>

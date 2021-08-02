@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>draco_sim_driver</name>
+  <name>rolling_joint</name>
   <version>0.0.0</version>
-  <description>The draco_sim_driver package</description>
+  <description>The rolling_joint package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
@@ -65,8 +65,8 @@
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
-    <cortex_framework plugin="${prefix}/sim_driver_plugins.xml" />
-    <cpp cflags="-I${prefix}/include" lflags="-L${prefix}/lib"/> 
+    <cortex_framework plugin="${prefix}/rolling_joint_plugins.xml" />
+    <!--<cpp cflags="-I${prefix}/include" lflags="-L${prefix}/lib"/> -->
   </export>
     <!-- Other tools can request additional information be placed here -->
 </package>

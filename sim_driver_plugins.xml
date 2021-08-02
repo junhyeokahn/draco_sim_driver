@@ -1,7 +1,0 @@
-<library path="lib/libdraco_sim_driver">
-  <class name="aptk::ctrl::DracoSimDriver" type="aptk::ctrl::DracoSimDriver" base_class_type="aptk::ctrl::ControllerBase">
-  <description>
-    draco sim driver
-  </description>
-  </class>
-</library>
